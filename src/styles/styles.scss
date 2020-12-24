@@ -1,0 +1,21 @@
+.grid_card {
+    display: grid;
+    grid-template-columns: 20% 50% 20% 10%;
+    text-align: left;
+    color: black;
+    text-decoration: underline #ffffff;
+}
+
+.button {
+    font-size: 2rem;
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1rem;
+}
+
+.pagination {
+    text-align: right;
+    margin: 1rem;
+}
