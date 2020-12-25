@@ -20,7 +20,7 @@ export const EditStudent = () => {
 
     useEffect(() => {        
         const studentUpdate = localStorage.getItem("studentUpdate")
-        console.log(studentUpdate)
+
         if (studentUpdate !== null) {
             setStudent(JSON.parse(studentUpdate))
             localStorage.removeItem("studentUpdate");
@@ -45,7 +45,6 @@ export const EditStudent = () => {
     const update = (e: any) => {
         clearError()
         let flag = 0;
-        // console.log(student)
 
         if (student === undefined || student.name === "") {
             showError("Please enter your name")
@@ -79,7 +78,6 @@ export const EditStudent = () => {
     }
 
     const showError = (errorText: string) => {
-        console.log("showError")
         var errorLabel = document.getElementById("errorText")
         
         if (errorLabel !== null) {
