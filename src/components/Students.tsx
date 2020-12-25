@@ -31,8 +31,8 @@ export const Students = () => {
             getDataFromLocalStorage(localStorageStudents);
         }
     }, []);
-
-    async function getDataFromAPI() {
+    
+    const getDataFromAPI = async() => {
         try {
             const url = "https://run.mocky.io/v3/c4e75d53-f90e-4b7f-8c1b-8d9457edb684"
             const response = (await fetch(url));
@@ -45,7 +45,7 @@ export const Students = () => {
         }
     }
 
-    async function getDataFromLocalStorage(localStorageStudents: string) {
+    const getDataFromLocalStorage = async(localStorageStudents: string) => {
         const localStorageStudentsProps: StudentProps[] = (JSON.parse(localStorageStudents));
         
         // Checks if a student has been updated
@@ -69,14 +69,19 @@ export const Students = () => {
         setCheckedStudents(selections.rowIds)
     }
 
-    const deleteChecked = async (e: any) => {
+    const deleteChecked = async(e: any) => {
+        let found
         checkedStudents.map(checkedStudent => {
-            const found = students?.find(student => student.id === checkedStudent.toString());
+            found = students?.find(student => student.id === checkedStudent.toString());
             found !== undefined && students?.splice(students.indexOf(found), 1)
         })
 
-        localStorage.setItem("students", JSON.stringify(students))
-        window.location.reload()
+        if (found === undefined) {
+            alert("Please select student/s to delete")
+        } else {
+            localStorage.setItem("students", JSON.stringify(students))
+            window.location.reload()
+        }
     }
 
     const onRowClicked = (e: RowParams) => {
