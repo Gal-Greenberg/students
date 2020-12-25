@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 
-import { DataGrid, RowsProp } from '@material-ui/data-grid';
+import { DataGrid, RowsProp, RowParams } from "@material-ui/data-grid";
+import { Button } from "@material-ui/core";
 
 import { StudentProps } from "../interfaces"
 
@@ -54,15 +55,19 @@ export const Students = () => {
             }
         }
         
+        //delete data from localStorage for testing
         // localStorage.removeItem("students");
 
+        // Get data from localStorge if first time running get from Rest API
         const localStorageStudents = localStorage.getItem("students")
-        console.log(localStorageStudents)
         if (localStorageStudents === null) {
             getData();
         } else {
             localStorageStudents !== undefined && setStudents(JSON.parse(localStorageStudents));
         }
+
+        // Checks if a student has been updated
+        // const studentUpdate = localStorage.getItem("studentUpdate")
     }, []);
 
     const onCheckboxChange = (selections: any) => {
@@ -79,22 +84,30 @@ export const Students = () => {
         localStorage.setItem("students", JSON.stringify(students));
     }
 
-    const updateStudent = () => {
+    const onRowClicked = (e: RowParams) => {
+        console.log(e.row)
+        localStorage.setItem("studentUpdate", JSON.stringify(e.row))
+        window.location.href = "http://localhost:3000/student"
+    }
 
+    const updateStudent = () => {
+        
     }
 
     var studentsProps = students ? students as RowsProp : [];
     console.log(studentsProps)
     return (
-        <div style={{ textAlign: "center" }}>
-            <div style={{ margin: "2rem", textAlign: "center", height: 550 }}>
-                <DataGrid pageSize={8} checkboxSelection
+        <div className="align_center">
+            <div className="data_grid">
+                <DataGrid
+                    pageSize={8} checkboxSelection
                     rows={studentsProps} columns={columns} 
                     onSelectionChange={onCheckboxChange}
-                    // onRowClick={}
+                    onRowClick={onRowClicked}
                 />
             </div>
-            <button className="button" onClick={deleteChecked}>delete</button>
+            <Button variant="contained" color="primary" onClick={deleteChecked}>delete</Button>
+            {/* <button className="button" onClick={deleteChecked}>delete</button> */}
         </div>
     )
 }
