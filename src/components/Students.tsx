@@ -42,33 +42,50 @@ export const Students = () => {
     ];
 
     useEffect(() => {
-        async function getData() {
-            try {
-                const url = "https://run.mocky.io/v3/c4e75d53-f90e-4b7f-8c1b-8d9457edb684"
-                const response = (await fetch(url));
-                response.json().then((data) => {
-                    setStudents(data);
-                    localStorage.setItem("students", JSON.stringify(data));
-                })
-            } catch (error) {
-                console.error(`fetch operation failed: ${error.message}`);
-            }
-        }
-        
         //delete data from localStorage for testing
         // localStorage.removeItem("students");
 
         // Get data from localStorge if first time running get from Rest API
         const localStorageStudents = localStorage.getItem("students")
         if (localStorageStudents === null) {
-            getData();
+            getDataFromAPI();
         } else {
-            localStorageStudents !== undefined && setStudents(JSON.parse(localStorageStudents));
+            getDataFromLocalStorage(localStorageStudents);
         }
-
-        // Checks if a student has been updated
-        // const studentUpdate = localStorage.getItem("studentUpdate")
     }, []);
+
+    async function getDataFromAPI() {
+        try {
+            const url = "https://run.mocky.io/v3/c4e75d53-f90e-4b7f-8c1b-8d9457edb684"
+            const response = (await fetch(url));
+            response.json().then((data) => {
+                setStudents(data);
+                localStorage.setItem("students", JSON.stringify(data));
+            })
+        } catch (error) {
+            console.error(`fetch operation failed: ${error.message}`);
+        }
+    }
+
+    async function getDataFromLocalStorage(localStorageStudents: string) {
+        const localStorageStudentsProps: StudentProps[] = (JSON.parse(localStorageStudents));
+        
+        // Checks if a student has been updated
+        const studentUpdate = localStorage.getItem("studentUpdate")
+        if (studentUpdate !== null) {
+            const studentUpdateProps = JSON.parse(studentUpdate)
+
+            localStorageStudentsProps.map(student => {
+                if (student.id === studentUpdateProps.id) {
+                    const index = localStorageStudentsProps.indexOf(student)
+                    localStorageStudentsProps[index] = studentUpdateProps
+                }
+            })
+            localStorage.removeItem("studentUpdate");
+            localStorage.setItem("students", JSON.stringify(localStorageStudentsProps))
+        }
+        setStudents(localStorageStudentsProps)
+    }
 
     const onCheckboxChange = (selections: any) => {
         setCheckedStudents(selections.rowIds)
@@ -90,10 +107,6 @@ export const Students = () => {
         window.location.href = "http://localhost:3000/student"
     }
 
-    const updateStudent = () => {
-        
-    }
-
     var studentsProps = students ? students as RowsProp : [];
     console.log(studentsProps)
     return (
@@ -107,7 +120,6 @@ export const Students = () => {
                 />
             </div>
             <Button variant="contained" color="primary" onClick={deleteChecked}>delete</Button>
-            {/* <button className="button" onClick={deleteChecked}>delete</button> */}
         </div>
     )
 }

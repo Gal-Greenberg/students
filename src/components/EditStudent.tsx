@@ -19,8 +19,6 @@ export const EditStudent = () => {
     const [student, setStudent] = useState<StudentProps>();
 
     useEffect(() => {        
-        // localStorage.removeItem("students");
-
         const studentUpdate = localStorage.getItem("studentUpdate")
         console.log(studentUpdate)
         if (studentUpdate !== null) {
@@ -46,8 +44,8 @@ export const EditStudent = () => {
 
     const update = (e: any) => {
         clearError()
-        let flag = 1;
-        console.log(student)
+        let flag = 0;
+        // console.log(student)
 
         if (student === undefined || student.name === "") {
             showError("Please enter your name")
@@ -75,7 +73,7 @@ export const EditStudent = () => {
         }
         
         if (flag === 0) {
-            localStorage.setItem("studentUpdate", JSON.stringify(e.row))
+            localStorage.setItem("studentUpdate", JSON.stringify(student))
             window.location.href = "http://localhost:3000/"
         }
     }
