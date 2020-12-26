@@ -34,7 +34,7 @@ export const Students = () => {
     
     const getDataFromAPI = async() => {
         try {
-            const url = "https://run.mocky.io/v3/c4e75d53-f90e-4b7f-8c1b-8d9457edb684"
+            const url = "https://run.mocky.io/v3/2a2d954c-439a-4a1a-9293-60d02635229d"
             const response = (await fetch(url));
             response.json().then((data) => {
                 setStudents(data);
